@@ -1,0 +1,11 @@
+{% load static %}
+
+{% if messages %}
+    {% for message in messages %}
+
+    <div id="toast-success"class= "bg-green-400 ml-56 mt-3 p-2 fixed w-52 rounded-2xl">
+      <h2>Gender Added succesfully!</h2>
+    </div>
+
+{% endfor %}
+{% endif %}
