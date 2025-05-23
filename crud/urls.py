@@ -9,5 +9,6 @@ urlpatterns = [
     path('gender/delete/<int:genderId>', views.delete_gender),
     path('user/list', views.user_list),
     path('user/add', views.add_user)
+    
 ]
 
