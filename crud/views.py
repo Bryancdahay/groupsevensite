@@ -92,20 +92,41 @@ def user_list(request):
 def add_user(request):
     try:
         if request.method == 'POST':
-            fullname = request.POST.get('full_name')
-            gender = request.POST.get('gender')
-            birth_date = request.POST.get('birth_date')
-            address = request.POST.get('address')
-            contact = request.POST.get('contact_number')
-            email = request.POST.get('email')
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            confirmpassword = request.POST.get('confirm_password')
+            fullname = request.POST.get('full_name', '').strip()
+            gender = request.POST.get('gender', '').strip()
+            birth_date = request.POST.get('birth_date', '').strip()
+            address = request.POST.get('address', '').strip()
+            contact = request.POST.get('contact_number', '').strip()
+            email = request.POST.get('email', '').strip()
+            username = request.POST.get('username', '').strip()
+            password = request.POST.get('password', '')
+            confirmpassword = request.POST.get('confirm_password', '')
 
-            if password != confirmpassword:
-                messages.error(request, 'Passwords do not match. Please try again.')
+            errors = {}
+
+            if not fullname:
+                errors['full_name'] = "Full name is required."
+            if not gender:
+                errors['gender'] = "Gender is required."
+            if not birth_date:
+                errors['birth_date'] = "Birth date is required."
+            if not address:
+                errors['address'] = "Address is required."
+            if not contact:
+                errors['contact_number'] = "Contact number is required."
+            if not email:
+                errors['email'] = "Email is required."
+            if not username:
+                errors['username'] = "Username is required."
+            if not password:
+                errors['password'] = "Password is required."
+            if not confirmpassword:
+                errors['confirm_password'] = "Confirm password is required."
+            elif password != confirmpassword:
+                errors['confirm_password'] = "Passwords do not match."
+
+            if errors:
                 gendervar = Gender.objects.all()
-
                 data = {
                     'genders': gendervar,
                     'form_data': {
@@ -116,7 +137,8 @@ def add_user(request):
                         'contact_number': contact,
                         'email': email,
                         'username': username,
-                    }
+                    },
+                    'errors': errors
                 }
                 return render(request, 'user/AddUser.html', data)
 
@@ -135,6 +157,6 @@ def add_user(request):
 
         else:
             gendervar = Gender.objects.all()
-            return render(request, 'user/AddUser.html', {'genders': gendervar})
+            return render(request, 'user/AddUser.html', {'genders': gendervar, 'errors': {}})
     except Exception as e:
         return HttpResponse(f'Error occurred during add user: {e}')

@@ -16,19 +16,26 @@
             <input type="text" id="full_name" name="full_name"
                    value="{{ form_data.full_name|default:'' }}"
                    class="block mx-auto bg-white border border-gray-600 text-black rounded-sm w-96" />
+            {% if errors.full_name %}
+            <p class="text-red-600 text-sm mt-1">{{ errors.full_name }}</p>
+            {% endif %}
         </div>
 
         <div class="text-center">
             <label for="gender" class="block mb-2 font-medium">Gender</label>
-            <select name="gender" id="gender" class="block mx-auto bg-white border border-gray-600 text-black rounded-sm w-96">
+            <select name="gender" id="gender"
+                    class="block mx-auto bg-white border border-gray-600 text-black rounded-sm w-96">
                 <option value="">Select Gender</option>
                 {% for gender in genders %}
                 <option value="{{ gender.gender_id }}"
-                    {% if form_data.gender == gender.gender_id|stringformat:"s" %}selected{% endif %}>
+                        {% if form_data.gender == gender.gender_id|stringformat:"s" %}selected{% endif %}>
                     {{ gender.gender }}
                 </option>
                 {% endfor %}
             </select>
+            {% if errors.gender %}
+            <p class="text-red-600 text-sm mt-1">{{ errors.gender }}</p>
+            {% endif %}
         </div>
 
         <div class="text-center">
@@ -36,6 +43,9 @@
             <input type="date" id="birth_date" name="birth_date"
                    value="{{ form_data.birth_date|default:'' }}"
                    class="block mx-auto bg-white border border-gray-600 text-black rounded-sm w-96" />
+            {% if errors.birth_date %}
+            <p class="text-red-600 text-sm mt-1">{{ errors.birth_date }}</p>
+            {% endif %}
         </div>
 
         <div class="text-center">
@@ -43,6 +53,9 @@
             <input type="text" id="address" name="address"
                    value="{{ form_data.address|default:'' }}"
                    class="block mx-auto bg-white border border-gray-600 text-black rounded-sm w-96" />
+            {% if errors.address %}
+            <p class="text-red-600 text-sm mt-1">{{ errors.address }}</p>
+            {% endif %}
         </div>
 
         <div class="text-center">
@@ -50,6 +63,9 @@
             <input type="text" id="contact_number" name="contact_number"
                    value="{{ form_data.contact_number|default:'' }}"
                    class="block mx-auto bg-white border border-gray-600 text-black rounded-sm w-96" />
+            {% if errors.contact_number %}
+            <p class="text-red-600 text-sm mt-1">{{ errors.contact_number }}</p>
+            {% endif %}
         </div>
 
         <div class="text-center">
@@ -57,6 +73,9 @@
             <input type="email" id="email" name="email"
                    value="{{ form_data.email|default:'' }}"
                    class="block mx-auto bg-white border border-gray-600 text-black rounded-sm w-96" />
+            {% if errors.email %}
+            <p class="text-red-600 text-sm mt-1">{{ errors.email }}</p>
+            {% endif %}
         </div>
 
         <div class="text-center">
@@ -64,22 +83,32 @@
             <input type="text" id="username" name="username"
                    value="{{ form_data.username|default:'' }}"
                    class="block mx-auto bg-white border border-gray-600 text-black rounded-sm w-96" />
+            {% if errors.username %}
+            <p class="text-red-600 text-sm mt-1">{{ errors.username }}</p>
+            {% endif %}
         </div>
 
         <div class="text-center">
             <label for="password" class="block mb-2 font-medium">Password</label>
             <input type="password" id="password" name="password"
                    class="block mx-auto bg-white border border-gray-600 text-black rounded-sm w-96" />
+            {% if errors.password %}
+            <p class="text-red-600 text-sm mt-1">{{ errors.password }}</p>
+            {% endif %}
         </div>
 
         <div class="text-center">
             <label for="confirm_password" class="block mb-2 font-medium">Confirm Password</label>
             <input type="password" id="confirm_password" name="confirm_password"
                    class="block mx-auto bg-white border border-gray-600 text-black rounded-sm w-96" />
+            {% if errors.confirm_password %}
+            <p class="text-red-600 text-sm mt-1">{{ errors.confirm_password }}</p>
+            {% endif %}
         </div>
 
         <div class="flex justify-center">
-            <button type="submit" class="bg-green-500 hover:bg-green-600 px-3 py-2 font-medium text-white rounded-sm cursor-pointer">
+            <button type="submit"
+                    class="bg-green-500 hover:bg-green-600 px-3 py-2 font-medium text-white rounded-sm cursor-pointer">
                 Save User
             </button>
         </div>
