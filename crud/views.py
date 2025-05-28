@@ -9,7 +9,8 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def home(request):
-    return render(request, "home.html")
+    return render(request, "gender/AddGender.html")
+
 
 def AuthView(request):
     if request.method == "POST":
@@ -24,11 +25,8 @@ def AuthView(request):
     else:
         form = UserCreationForm()
     return render(request, "registration/signup.html", {"form": form})
-
-
-
     
-
+@login_required
 def gender_list(request):
     try:
         gender = Gender.objects.all()
@@ -40,7 +38,7 @@ def gender_list(request):
     except Exception as e:
         return HttpResponse(f'Error occured during load genders: {e}')
     
-
+@login_required
 def add_gender(request):
 
     try:
@@ -54,7 +52,8 @@ def add_gender(request):
             return render(request, 'gender/AddGender.html')
     except Exception as e:
         return HttpResponse(f'Error occured during add gender: {e}')
-    
+
+@login_required 
 def edit_gender(request, genderId):
     try:
         if request.method == 'POST':
@@ -81,7 +80,8 @@ def edit_gender(request, genderId):
         return render(request, 'gender/EditGender.html', data)
     except Exception as e:
         return HttpResponse(f'Error occured during edit gender: {e}')
-    
+
+@login_required
 def delete_gender(request, genderId):
     try:
         if request.method == 'POST':
@@ -101,7 +101,7 @@ def delete_gender(request, genderId):
     except Exception as e:
         return HttpResponse(f'Error occured during delete gender: {e}')
 
-
+@login_required
 def user_list(request):
     try:
         userObj = Users.objects.select_related('gender')
@@ -114,6 +114,7 @@ def user_list(request):
     except Exception as e:
         return HttpResponse (f'Error occured during load users:{e}')
 
+@login_required
 def add_user(request):
     try:
         if request.method == 'POST':
@@ -129,6 +130,7 @@ def add_user(request):
 
             errors = {}
 
+            # Basic validations
             if not fullname:
                 errors['full_name'] = "Full name is required."
             if not gender:
@@ -150,6 +152,12 @@ def add_user(request):
             elif password != confirmpassword:
                 errors['confirm_password'] = "Passwords do not match."
 
+            # Unique constraints
+            if email and Users.objects.filter(email=email).exists():
+                errors['email'] = "Email is already taken."
+            if username and Users.objects.filter(username=username).exists():
+                errors['username'] = "Username is already taken."
+
             if errors:
                 gendervar = Gender.objects.all()
                 data = {
@@ -167,6 +175,7 @@ def add_user(request):
                 }
                 return render(request, 'user/AddUser.html', data)
 
+            # Save new user
             Users.objects.create(
                 full_name=fullname,
                 gender=Gender.objects.get(pk=gender),
@@ -185,3 +194,4 @@ def add_user(request):
             return render(request, 'user/AddUser.html', {'genders': gendervar, 'errors': {}})
     except Exception as e:
         return HttpResponse(f'Error occurred during add user: {e}')
+
