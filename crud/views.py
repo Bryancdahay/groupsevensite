@@ -1,8 +1,33 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
 from .models import Gender, Users
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.decorators import login_required
+
+
+@login_required
+def home(request):
+    return render(request, "home.html")
+
+def AuthView(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+        else:
+            # This is where you print form errors to the console for debugging
+            print(form.errors)
+            return render(request, "registration/signup.html", {"form": form})
+    else:
+        form = UserCreationForm()
+    return render(request, "registration/signup.html", {"form": form})
+
+
+
+    
 
 def gender_list(request):
     try:
